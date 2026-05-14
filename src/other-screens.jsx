@@ -639,6 +639,15 @@ function ReviewsScreen({ onOpenOpp }) {
 
 // ─── Settings (minimal but real) ─────────────────────────────────────────────
 
+function Row({ k, children }) {
+  return (
+    <div className="flex items-baseline gap-3">
+      <div className="w-32 shrink-0 text-[10.5px] uppercase tracking-wider text-slate-500">{k}</div>
+      <div className="text-slate-200 flex-1">{children}</div>
+    </div>
+  );
+}
+
 function SettingsScreen() {
   return (
     <div className="px-6 py-5 max-w-[820px]">

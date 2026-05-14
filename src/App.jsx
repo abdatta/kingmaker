@@ -12,6 +12,7 @@ import {
   Outlet,
 } from 'react-router-dom';
 import { Sidebar, TopBar, AIRail } from './shell.jsx';
+import { RouteErrorBoundary } from './error-boundary.jsx';
 import { Dashboard } from './dashboard.jsx';
 import { Pipeline } from './pipeline.jsx';
 import { WorkspaceParts } from './workspace.jsx';
@@ -462,23 +463,22 @@ export default function App() {
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <TopBar route={routeShape} onNavigate={goNavigate} syncedAgo="8 min ago" opp={opp} />
         <div className="flex-1 overflow-y-auto">
-          <Routes>
-            <Route path="/" element={<Dashboard onOpenOpp={openOpp} onNavigate={goNavigate} />} />
-            <Route path="/pipeline" element={<Pipeline onOpenOpp={openOpp} />} />
-            <Route path="/reviews" element={<ReviewsScreen onOpenOpp={openOpp} />} />
-            <Route path="/team" element={<TeamScreen />} />
-            <Route path="/kb" element={<KBScreen />} />
-            <Route path="/settings" element={<SettingsScreen />} />
-            <Route
-              path="/opp/:oppId"
-              element={<Navigate to="budget" replace />}
-            />
-            <Route
-              path="/opp/:oppId/:step"
-              element={<OpportunityWorkspace ctx={workspaceContext} />}
-            />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <RouteErrorBoundary>
+            <Routes>
+              <Route path="/" element={<Dashboard onOpenOpp={openOpp} onNavigate={goNavigate} />} />
+              <Route path="/pipeline" element={<Pipeline onOpenOpp={openOpp} />} />
+              <Route path="/reviews" element={<ReviewsScreen onOpenOpp={openOpp} />} />
+              <Route path="/team" element={<TeamScreen />} />
+              <Route path="/kb" element={<KBScreen />} />
+              <Route path="/settings" element={<SettingsScreen />} />
+              <Route path="/opp/:oppId" element={<Navigate to="budget" replace />} />
+              <Route
+                path="/opp/:oppId/:step"
+                element={<OpportunityWorkspace ctx={workspaceContext} />}
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </RouteErrorBoundary>
         </div>
       </main>
       <AIRail
