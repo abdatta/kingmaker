@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    background: #020617;
+    color: #f1f5f9;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  button,
+  [role='button'] {
+    outline: none;
+  }
+  ::selection {
+    background: rgba(34, 211, 238, 0.3);
+    color: #f8fafc;
+  }
+}
+
+@layer utilities {
+  @keyframes km-pulse {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.4);
+    }
+  }
+  .km-pulse {
+    animation: km-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes km-shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: 200px 0;
+    }
+  }
+  .km-shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(34, 211, 238, 0) 0%,
+      rgba(34, 211, 238, 0.35) 50%,
+      rgba(34, 211, 238, 0) 100%
+    );
+    background-size: 200px 100%;
+    animation: km-shimmer 2.4s linear infinite;
+  }
+}

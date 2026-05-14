@@ -1,8 +1,37 @@
-// dashboard.jsx — Dashboard screen.
+// Dashboard screen.
+import React from 'react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Tooltip,
+  Cell,
+} from 'recharts';
+import { Icon } from './icons.jsx';
+import {
+  Pill,
+  Avatar,
+  Button,
+  Card,
+  CardHeader,
+  AICell,
+  Mono,
+  DeadlineChip,
+  StatusPill,
+  ProductPill,
+  TONE_TEXT,
+} from './primitives.jsx';
+import {
+  NEEDS,
+  OPPS_BY_ID,
+  FUNNEL,
+  AI_FEED,
+  DISCOVERY_AGENT,
+} from './data.js';
 
-function Dashboard({ onOpenOpp, onNavigate }) {
-  const Recharts = window.Recharts;
-  const { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } = Recharts;
+export function Dashboard({ onOpenOpp, onNavigate }) {
 
   const kpis = [
     { label: 'Active Opportunities', value: '11', delta: '+3 USDOT pursue',  tone: 'cyan' },
@@ -55,11 +84,11 @@ function Dashboard({ onOpenOpp, onNavigate }) {
           <CardHeader
             eyebrow="Approval queue"
             title="Needs your attention"
-            right={<Pill tone="amber" dot>{window.NEEDS.length}</Pill>}
+            right={<Pill tone="amber" dot>{NEEDS.length}</Pill>}
           />
           <ul className="divide-y divide-slate-800">
-            {window.NEEDS.map((n) => {
-              const opp = window.OPPS_BY_ID[n.oppId];
+            {NEEDS.map((n) => {
+              const opp = OPPS_BY_ID[n.oppId];
               return (
                 <li key={n.id}>
                   <button onClick={() => onOpenOpp(n.oppId, n.routeStep || (n.text.includes('Budget') ? 'budget' : n.text.includes('Triage') ? 'triage' : n.text.includes('Volume') || n.text.includes('OSDMP') || n.text.includes('letters') ? 'submission' : 'draft'))}
@@ -91,14 +120,14 @@ function Dashboard({ onOpenOpp, onNavigate }) {
           <CardHeader eyebrow="By stage" title="Pipeline funnel" />
           <div className="px-4 pt-3 pb-4 h-[228px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={window.FUNNEL} layout="vertical" margin={{ top: 4, right: 16, bottom: 4, left: 8 }}>
+              <BarChart data={FUNNEL} layout="vertical" margin={{ top: 4, right: 16, bottom: 4, left: 8 }}>
                 <XAxis type="number" hide domain={[0, 14]} />
                 <YAxis type="category" dataKey="stage" width={62}
                   tick={{ fill: '#94a3b8', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <Tooltip cursor={{ fill: 'rgba(15,23,42,0.6)' }}
                   contentStyle={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: 6, fontSize: 11 }} />
                 <Bar dataKey="count" radius={[0, 3, 3, 0]} barSize={14}>
-                  {window.FUNNEL.map((d, i) => (
+                  {FUNNEL.map((d, i) => (
                     <Cell key={i} fill={i === 0 ? '#0ea5e9' : i === 1 ? '#f59e0b' : i === 2 ? '#0ea5e9' : i === 3 ? '#22d3ee' : i === 4 ? '#a78bfa' : '#10b981'} />
                   ))}
                 </Bar>
@@ -115,7 +144,7 @@ function Dashboard({ onOpenOpp, onNavigate }) {
             right={<button onClick={() => onNavigate('pipeline')} className="text-[11px] text-cyan-400 hover:underline">View all</button>} />
           <ul className="divide-y divide-slate-800">
             {upcoming.map((u) => {
-              const o = window.OPPS_BY_ID[u.id];
+              const o = OPPS_BY_ID[u.id];
               return (
                 <li key={u.id}>
                   <button onClick={() => onOpenOpp(u.id)} className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-800/40 text-left">
@@ -136,7 +165,7 @@ function Dashboard({ onOpenOpp, onNavigate }) {
           <CardHeader eyebrow="Last 6h" title="Kingmaker activity"
             right={<Pill tone="violet" dot>AI</Pill>} />
           <ul className="px-4 py-3 space-y-3">
-            {window.AI_FEED.map((a, i) => (
+            {AI_FEED.map((a, i) => (
               <li key={i} className="text-[11.5px] text-slate-300 leading-relaxed">
                 <div className="text-[10px] text-slate-500 mb-0.5">{a.at}</div>
                 <AICell>{a.text}</AICell>
@@ -149,12 +178,11 @@ function Dashboard({ onOpenOpp, onNavigate }) {
   );
 }
 
-window.Dashboard = Dashboard;
 
 // ─── Discovery Agent Activity panel ──────────────────────────────────────
 function DiscoveryAgentPanel() {
   const [open, setOpen] = React.useState(false);
-  const da = window.DISCOVERY_AGENT;
+  const da = DISCOVERY_AGENT;
   return (
     <Card>
       <CardHeader

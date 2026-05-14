@@ -1,15 +1,32 @@
-// pipeline.jsx — Pipeline / Opportunity Feed table.
+// Pipeline / Opportunity Feed table.
+import React from 'react';
+import { Icon } from './icons.jsx';
+import {
+  Pill,
+  Avatar,
+  Button,
+  Card,
+  AIBadge,
+  KBD,
+  Mono,
+  MoneyMono,
+  DeadlineChip,
+  StageDots,
+  StatusPill,
+  ProductPill,
+} from './primitives.jsx';
+import { OPPORTUNITIES } from './data.js';
 
-function Pipeline({ onOpenOpp }) {
+export function Pipeline({ onOpenOpp }) {
   const [filters, setFilters] = React.useState({ status: 'All', agency: 'All', product: 'All', owner: 'All' });
   const [selected, setSelected] = React.useState(new Set());
 
-  const allStatuses = ['All', ...new Set(window.OPPORTUNITIES.map((o) => o.status))];
-  const allAgencies = ['All', ...new Set(window.OPPORTUNITIES.map((o) => o.agency))];
-  const allProducts = ['All', ...new Set(window.OPPORTUNITIES.map((o) => o.productLine))];
-  const allOwners = ['All', ...new Set(window.OPPORTUNITIES.map((o) => o.owner).filter(Boolean))];
+  const allStatuses = ['All', ...new Set(OPPORTUNITIES.map((o) => o.status))];
+  const allAgencies = ['All', ...new Set(OPPORTUNITIES.map((o) => o.agency))];
+  const allProducts = ['All', ...new Set(OPPORTUNITIES.map((o) => o.productLine))];
+  const allOwners = ['All', ...new Set(OPPORTUNITIES.map((o) => o.owner).filter(Boolean))];
 
-  const filtered = window.OPPORTUNITIES.filter((o) =>
+  const filtered = OPPORTUNITIES.filter((o) =>
     (filters.status === 'All' || o.status === filters.status) &&
     (filters.agency === 'All' || o.agency === filters.agency) &&
     (filters.product === 'All' || o.productLine === filters.product) &&
@@ -63,7 +80,7 @@ function Pipeline({ onOpenOpp }) {
           <Filter label="Product" k="product" options={allProducts} />
           <Filter label="Owner" k="owner" options={allOwners} />
           <span className="ml-auto text-[11px] text-slate-500">
-            {filtered.length} of {window.OPPORTUNITIES.length} shown
+            {filtered.length} of {OPPORTUNITIES.length} shown
           </span>
         </div>
       </Card>
@@ -138,4 +155,3 @@ function Pipeline({ onOpenOpp }) {
   );
 }
 
-window.Pipeline = Pipeline;

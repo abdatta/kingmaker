@@ -1,4 +1,18 @@
-// shell.jsx — Global app shell: Sidebar, TopBar, AIRail.
+// Global app shell: Sidebar, TopBar, AIRail.
+import React from 'react';
+import { Icon } from './icons.jsx';
+import {
+  Pill,
+  Avatar,
+  Button,
+  AIBadge,
+  KBD,
+  Mono,
+  DeadlineChip,
+  SectionHeading,
+  StatusPill,
+} from './primitives.jsx';
+import { OPPS_BY_ID, AI_FEED } from './data.js';
 
 function Sidebar({ route, onNavigate, collapsed, onToggleCollapse, reviewBadge }) {
   const items = [
@@ -88,7 +102,7 @@ function Breadcrumbs({ route, onNavigate }) {
   };
   if (route.screen === 'opportunity') {
     crumbs.push({ key: 'pipeline', label: 'Pipeline' });
-    const o = window.OPPS_BY_ID[route.oppId];
+    const o = OPPS_BY_ID[route.oppId];
     if (o) crumbs.push({ key: 'opp', label: o.title });
   } else {
     crumbs.push({ key: route.screen, label: labels[route.screen] || route.screen });
@@ -110,7 +124,7 @@ function Breadcrumbs({ route, onNavigate }) {
 }
 
 function TopBar({ route, onNavigate, syncedAgo }) {
-  const opp = route.screen === 'opportunity' ? window.OPPS_BY_ID[route.oppId] : null;
+  const opp = route.screen === 'opportunity' ? OPPS_BY_ID[route.oppId] : null;
 
   return (
     <header className="h-14 border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-20 flex items-center px-5 gap-4">
@@ -249,7 +263,7 @@ function AIRail({ collapsed, onToggle, suggestions = [], decisions = {}, onDecid
         <div className="pt-4">
           <SectionHeading className="mb-2">Recent activity</SectionHeading>
           <ul className="space-y-2.5">
-            {window.AI_FEED.slice(0, 5).map((a, i) => (
+            {AI_FEED.slice(0, 5).map((a, i) => (
               <li key={i} className="text-[11.5px] text-slate-400 leading-relaxed">
                 <span className="block text-[10px] text-slate-500 mb-0.5">{a.at}</span>
                 {a.text}
@@ -262,4 +276,4 @@ function AIRail({ collapsed, onToggle, suggestions = [], decisions = {}, onDecid
   );
 }
 
-Object.assign(window, { Sidebar, TopBar, Breadcrumbs, AIRail, AISuggestionCard });
+export { Sidebar, TopBar, Breadcrumbs, AIRail, AISuggestionCard };

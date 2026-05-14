@@ -1,4 +1,7 @@
-// primitives.jsx — Reusable UI atoms.
+// Reusable UI atoms (Pill, Avatar, Card, Button, etc.).
+import React from 'react';
+import { Icon } from './icons.jsx';
+import { STATUS_TONES, TEAM_BY_ID, PRODUCT_LINES } from './data.js';
 
 const TONE_BG = {
   cyan:    'bg-cyan-500/10 text-cyan-300 ring-cyan-400/20',
@@ -41,12 +44,12 @@ function Pill({ tone = 'slate', children, dot = false, className = '' }) {
 }
 
 function StatusPill({ status }) {
-  const tone = window.STATUS_TONES[status] || 'slate';
+  const tone = STATUS_TONES[status] || 'slate';
   return <Pill tone={tone} dot>{status}</Pill>;
 }
 
 function Avatar({ id, size = 24, ring = true }) {
-  const t = window.TEAM_BY_ID[id];
+  const t = TEAM_BY_ID[id];
   if (!t) return (
     <span style={{ width: size, height: size, fontSize: size * 0.42 }}
       className={`inline-flex items-center justify-center rounded-full bg-slate-800 text-slate-300 ${ring ? 'ring-1 ring-slate-700' : ''}`}>?</span>
@@ -127,7 +130,7 @@ function Mono({ children, className = '' }) {
 }
 
 function ProductPill({ name }) {
-  const p = window.PRODUCT_LINES[name];
+  const p = PRODUCT_LINES[name];
   if (!p) return null;
   return <Pill tone={p.tone}>{p.label}</Pill>;
 }
@@ -182,9 +185,27 @@ function SectionHeading({ children, className = '' }) {
   return <div className={`text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500 ${className}`}>{children}</div>;
 }
 
-Object.assign(window, {
-  Pill, StatusPill, Avatar, AvatarStack, Card, CardHeader, Button,
-  MoneyMono, Mono, ProductPill, StageDots, DeadlineChip,
-  AICell, AIBadge, ProgressBar, KBD, SectionHeading,
-  TONE_BG, TONE_DOT, TONE_TEXT, TONE_BORDER, TONE_AVATAR,
-});
+export {
+  Pill,
+  StatusPill,
+  Avatar,
+  AvatarStack,
+  Card,
+  CardHeader,
+  Button,
+  MoneyMono,
+  Mono,
+  ProductPill,
+  StageDots,
+  DeadlineChip,
+  AICell,
+  AIBadge,
+  ProgressBar,
+  KBD,
+  SectionHeading,
+  TONE_BG,
+  TONE_DOT,
+  TONE_TEXT,
+  TONE_BORDER,
+  TONE_AVATAR,
+};

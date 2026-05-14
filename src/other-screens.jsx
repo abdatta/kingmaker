@@ -1,4 +1,30 @@
-// other-screens.jsx — Budget, Assembly, Submission, Team, KB, Reviews, Settings.
+// Budget, Assembly, Compliance, Team, KB, Reviews, Settings.
+import React from 'react';
+import { Icon } from './icons.jsx';
+import {
+  Pill,
+  Avatar,
+  Button,
+  Card,
+  CardHeader,
+  AIBadge,
+  AICell,
+  Mono,
+  MoneyMono,
+  ProgressBar,
+  DeadlineChip,
+  StatusPill,
+  ProductPill,
+} from './primitives.jsx';
+import {
+  ASSEMBLY_FORMAT,
+  COMPLIANCE,
+  TEAM,
+  OPPORTUNITIES,
+  KB,
+  NEEDS,
+  OPPS_BY_ID,
+} from './data.js';
 
 function BudgetPanel({ lines, indirect, total, onTrim, trimmed, ceiling }) {
   const groups = [...new Set(lines.map((l) => l.category))];
@@ -113,7 +139,7 @@ function asmStatusLabel(s) {
 }
 
 function AssemblyPanel({ opp }) {
-  const fmt = window.ASSEMBLY_FORMAT[opp?.id] || window.ASSEMBLY_FORMAT['alias-tx'];
+  const fmt = ASSEMBLY_FORMAT[opp?.id] || ASSEMBLY_FORMAT['alias-tx'];
   if (fmt.kind === 'wp_deck') return <AssemblyWpDeck opp={opp} fmt={fmt} />;
   return <AssemblyNasaStandard opp={opp} fmt={fmt} />;
 }
@@ -198,7 +224,7 @@ function AssemblyWpDeck({ opp, fmt }) {
       <Card>
         <CardHeader eyebrow="Format rules · enforced on compile" title="DARPA SBIR XL format requirements" />
         <ul className="px-4 py-3 grid grid-cols-2 gap-x-6 gap-y-1.5 text-[12px] text-slate-300">
-          {window.COMPLIANCE['alias-tx'].format.map((f, i) => (
+          {COMPLIANCE['alias-tx'].format.map((f, i) => (
             <li key={i} className="flex items-start gap-2"><Icon.CheckCircle size={12} className="text-emerald-400 mt-0.5 flex-shrink-0" />{f}</li>
           ))}
         </ul>
@@ -247,7 +273,7 @@ function AssemblyNasaStandard({ opp, fmt }) {
         <Card>
           <CardHeader eyebrow="Format rules · enforced on compile" title="NASA SBIR format" />
           <ul className="px-4 py-3 space-y-2 text-[12px] text-slate-300">
-            {window.COMPLIANCE['expand'].format.map((f, i) => (
+            {COMPLIANCE['expand'].format.map((f, i) => (
               <li key={i} className="flex items-start gap-2"><Icon.CheckCircle size={12} className="text-emerald-400 mt-0.5 flex-shrink-0" />{f}</li>
             ))}
           </ul>
@@ -271,7 +297,7 @@ const VOLUME_STATUS = {
 };
 
 function CompliancePanel({ opp }) {
-  const C = window.COMPLIANCE[opp?.id] || window.COMPLIANCE['alias-tx'];
+  const C = COMPLIANCE[opp?.id] || COMPLIANCE['alias-tx'];
   const [checks, setChecks] = React.useState(() => {
     const init = {};
     Object.values(C.checklist).forEach((items) => items.forEach((it) => { init[it.id] = it.ok; }));
@@ -439,13 +465,13 @@ function TeamScreen({ onBack }) {
         <div>
           <div className="text-[11px] uppercase tracking-[0.14em] text-slate-500">Capacity & capability</div>
           <h1 className="text-[22px] font-semibold text-slate-100 mt-0.5">Team & Capabilities</h1>
-          <p className="text-[12.5px] text-slate-400 mt-1">9 contributors · {window.TEAM.filter((t) => t.availability < 0.5).length} at high load</p>
+          <p className="text-[12.5px] text-slate-400 mt-1">9 contributors · {TEAM.filter((t) => t.availability < 0.5).length} at high load</p>
         </div>
         <Button variant="outline" size="md" icon={<Icon.Plus size={13} />}>Invite teammate</Button>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
-        {window.TEAM.map((p) => (
+        {TEAM.map((p) => (
           <Card key={p.id} className="p-4 hover:ring-1 hover:ring-slate-700 cursor-pointer transition" as="button" onClick={() => setActive(p)}>
             <div className="flex items-start gap-3 text-left w-full">
               <Avatar id={p.id} size={40} />
@@ -498,7 +524,7 @@ function PersonDetail({ person, onBack }) {
               <ProgressBar value={(1 - person.availability) * 100} tone={person.availability > 0.5 ? 'emerald' : person.availability > 0.3 ? 'amber' : 'rose'} height={6} />
             </div>
             <div className="space-y-2 pt-2">
-              {window.OPPORTUNITIES.filter((o) => o.owner === person.id).map((o) => (
+              {OPPORTUNITIES.filter((o) => o.owner === person.id).map((o) => (
                 <div key={o.id} className="flex items-center gap-2 rounded border border-slate-800 bg-slate-950/40 px-3 py-2">
                   <ProductPill name={o.productLine} />
                   <div className="flex-1 text-slate-200">{o.title}</div>
@@ -506,7 +532,7 @@ function PersonDetail({ person, onBack }) {
                   <StatusPill status={o.status} />
                 </div>
               ))}
-              {window.OPPORTUNITIES.filter((o) => o.owner === person.id).length === 0 && (
+              {OPPORTUNITIES.filter((o) => o.owner === person.id).length === 0 && (
                 <div className="text-[11.5px] text-slate-500 italic">Not currently leading an active proposal.</div>
               )}
             </div>
@@ -521,7 +547,7 @@ function PersonDetail({ person, onBack }) {
 
 function KBScreen() {
   const [q, setQ] = React.useState('');
-  const filtered = window.KB.filter((k) => k.title.toLowerCase().includes(q.toLowerCase()) || k.tags.some((t) => t.toLowerCase().includes(q.toLowerCase())));
+  const filtered = KB.filter((k) => k.title.toLowerCase().includes(q.toLowerCase()) || k.tags.some((t) => t.toLowerCase().includes(q.toLowerCase())));
   return (
     <div className="px-6 py-5 max-w-[1180px]">
       <div className="flex items-end justify-between mb-4">
@@ -586,8 +612,8 @@ function ReviewsScreen({ onOpenOpp }) {
       </div>
       <Card>
         <ul className="divide-y divide-slate-800">
-          {window.NEEDS.map((n) => {
-            const o = window.OPPS_BY_ID[n.oppId];
+          {NEEDS.map((n) => {
+            const o = OPPS_BY_ID[n.oppId];
             return (
               <li key={n.id}>
                 <button onClick={() => onOpenOpp(n.oppId)} className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-800/30 text-left">
@@ -651,4 +677,12 @@ function SettingsScreen() {
   );
 }
 
-window.OtherScreens = { BudgetPanel, AssemblyPanel, CompliancePanel, TeamScreen, KBScreen, ReviewsScreen, SettingsScreen };
+export {
+  BudgetPanel,
+  AssemblyPanel,
+  CompliancePanel,
+  TeamScreen,
+  KBScreen,
+  ReviewsScreen,
+  SettingsScreen,
+};

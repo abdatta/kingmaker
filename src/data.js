@@ -633,12 +633,24 @@ const READINESS_INITIAL = [
   { id: 'r7', label: 'Final approver sign-off',                ok: false, blocker: 'Awaiting Ryan' },
 ];
 
-// Expose globally for other Babel scripts
-Object.assign(window, {
-  TEAM, TEAM_BY_ID, PRODUCT_LINES, STATUS_TONES,
-  OPPORTUNITIES, OPPS_BY_ID, STEPS, ALIAS,
+export {
+  TEAM,
+  TEAM_BY_ID,
+  PRODUCT_LINES,
+  STATUS_TONES,
+  OPPORTUNITIES,
+  OPPS_BY_ID,
+  STEPS,
+  ALIAS,
   DISCOVERY_AGENT,
-  BUDGET_LINES_INITIAL, BUDGET_INDIRECT_RATE,
-  KB, AI_FEED, NEEDS, FUNNEL, ASSEMBLY, READINESS_INITIAL,
-  COMPLIANCE, ASSEMBLY_FORMAT,
-});
+  BUDGET_LINES_INITIAL,
+  BUDGET_INDIRECT_RATE,
+  KB,
+  AI_FEED,
+  NEEDS,
+  FUNNEL,
+  ASSEMBLY,
+  READINESS_INITIAL,
+  COMPLIANCE,
+  ASSEMBLY_FORMAT,
+};

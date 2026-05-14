@@ -1,4 +1,20 @@
-// workspace.jsx — Opportunity workspace: 10-step nav + all step panels.
+// Opportunity workspace: 10-step nav + all step panels.
+import React from 'react';
+import { Icon } from './icons.jsx';
+import {
+  Pill,
+  Avatar,
+  Button,
+  Card,
+  CardHeader,
+  AIBadge,
+  AICell,
+  Mono,
+  MoneyMono,
+  ProgressBar,
+  SectionHeading,
+} from './primitives.jsx';
+import { ALIAS, TEAM_BY_ID } from './data.js';
 
 function StepNav({ steps, activeId, statusMap, onClickStep }) {
   return (
@@ -87,7 +103,7 @@ function TriagePanel({ opp, decided, onDecide }) {
         />
         <div className="p-4">
           <AICell className="pl-4">
-            <p className="text-[13px] text-slate-200 leading-relaxed">{window.ALIAS.triage.rationale}</p>
+            <p className="text-[13px] text-slate-200 leading-relaxed">{ALIAS.triage.rationale}</p>
           </AICell>
 
           <div className="mt-5 grid grid-cols-3 gap-2">
@@ -101,7 +117,7 @@ function TriagePanel({ opp, decided, onDecide }) {
             {decided ? (
               <div className="rounded border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-[12px] text-emerald-200 flex items-center gap-2">
                 <Icon.CheckCircle size={14} />
-                <span>Pursued by <span className="font-medium">Ryan Alimo</span> · {window.ALIAS.triage.decidedAt}</span>
+                <span>Pursued by <span className="font-medium">Ryan Alimo</span> · {ALIAS.triage.decidedAt}</span>
               </div>
             ) : (
               <div className="flex gap-2">
@@ -118,12 +134,12 @@ function TriagePanel({ opp, decided, onDecide }) {
       <Card>
         <CardHeader eyebrow="Discussion" title="Comments" />
         <ul className="px-4 py-4 space-y-3.5">
-          {window.ALIAS.triage.comments.map((c, i) => (
+          {ALIAS.triage.comments.map((c, i) => (
             <li key={i} className="flex gap-2.5">
               <Avatar id={c.who} size={26} />
               <div className="min-w-0">
                 <div className="text-[11.5px] text-slate-300">
-                  <span className="font-medium text-slate-100">{window.TEAM_BY_ID[c.who].name}</span>
+                  <span className="font-medium text-slate-100">{TEAM_BY_ID[c.who].name}</span>
                   <span className="text-slate-500"> · {c.at}</span>
                 </div>
                 <p className="text-[12px] text-slate-300 mt-0.5 leading-relaxed">{c.text}</p>
@@ -276,7 +292,7 @@ function ScopePanel() {
             <div key={g}>
               <div className="text-[10.5px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">{g}</div>
               <ul className="space-y-1">
-                {window.ALIAS.scope.requirements.filter((r) => r.group === g).map((r, i) => (
+                {ALIAS.scope.requirements.filter((r) => r.group === g).map((r, i) => (
                   <li key={i} className="flex items-start gap-2 text-[12px] text-slate-200 px-2 py-1.5 rounded hover:bg-slate-800/40">
                     <span className="mt-0.5">{covIcon[r.cov]}</span>
                     <span className="flex-1 leading-snug">{r.text}</span>
@@ -293,7 +309,7 @@ function ScopePanel() {
         <Card>
           <CardHeader eyebrow="OpalAI · FireVision" title="Capability matrix" />
           <ul className="px-4 py-3 space-y-1.5">
-            {window.ALIAS.scope.capabilities.map((c, i) => (
+            {ALIAS.scope.capabilities.map((c, i) => (
               <li key={i} className="flex items-center gap-2.5 text-[12px] py-1">
                 <span className={`h-2 w-2 rounded-full ${TONE_DOT[c.tone]}`} />
                 <span className="text-slate-200 flex-1">{c.name}</span>
@@ -306,7 +322,7 @@ function ScopePanel() {
         <Card>
           <CardHeader eyebrow="Identified" title="Capability gaps" right={<AIBadge />} />
           <ul className="px-4 py-3 space-y-2.5">
-            {window.ALIAS.scope.gaps.map((g, i) => (
+            {ALIAS.scope.gaps.map((g, i) => (
               <li key={i} className="rounded border border-slate-800 bg-slate-950/40 p-3">
                 <div className="text-[12.5px] font-medium text-slate-100">{g.title}</div>
                 <AICell className="mt-1.5">
@@ -324,7 +340,7 @@ function ScopePanel() {
 function CollaboratorsPanel({ decisions, onDecide }) {
   return (
     <div className="grid grid-cols-2 gap-3">
-      {window.ALIAS.collaborators.map((c) => {
+      {ALIAS.collaborators.map((c) => {
         const accepted = decisions[c.id] === 'accepted' || c.status === 'accepted';
         const rejected = decisions[c.id] === 'rejected';
         return (
@@ -370,7 +386,7 @@ function CollaboratorsPanel({ decisions, onDecide }) {
 
 // Drafting workspace
 function DraftPanel({ activeSection, onSection, sectionApprovals, onApproveSection }) {
-  const sections = window.ALIAS.sections;
+  const sections = ALIAS.sections;
   const cur = sections.find((s) => s.id === activeSection) || sections[1];
 
   return (
@@ -428,7 +444,7 @@ function DraftPanel({ activeSection, onSection, sectionApprovals, onApproveSecti
 
           {cur.id === 'tech' ? (
             <div className="space-y-5 text-[13.5px] leading-[1.7] text-slate-200">
-              {window.ALIAS.draft.paragraphs.map((p, i) => (
+              {ALIAS.draft.paragraphs.map((p, i) => (
                 <ParagraphBlock key={i} p={p} />
               ))}
               <div className="text-[11px] text-slate-500 italic pt-3 border-t border-slate-800">
@@ -453,7 +469,7 @@ function ParagraphBlock({ p }) {
       <div className="relative pl-4 border-l-2 border-emerald-500/40">
         <div className="flex items-center gap-1.5 mb-1.5">
           <Pill tone="emerald" dot><Icon.Check size={11} />approved</Pill>
-          <span className="text-[10.5px] text-slate-500">by {window.TEAM_BY_ID[p.author].name} · {p.when}</span>
+          <span className="text-[10.5px] text-slate-500">by {TEAM_BY_ID[p.author].name} · {p.when}</span>
         </div>
         <p>{p.text}</p>
       </div>
@@ -464,7 +480,7 @@ function ParagraphBlock({ p }) {
       <div className="relative pl-4 border-l-2 border-slate-700">
         <div className="flex items-center gap-1.5 mb-1.5">
           <Pill tone="slate"><Icon.Edit size={10} />edited</Pill>
-          <span className="text-[10.5px] text-slate-500">by {window.TEAM_BY_ID[p.author].name} · {p.when}</span>
+          <span className="text-[10.5px] text-slate-500">by {TEAM_BY_ID[p.author].name} · {p.when}</span>
         </div>
         <p>{p.text}</p>
       </div>
@@ -484,10 +500,10 @@ function ParagraphBlock({ p }) {
 
 // Tasks
 function TasksPanel() {
-  const total = window.ALIAS.tasks.reduce((s, t) => s + t.alloc, 0);
+  const total = ALIAS.tasks.reduce((s, t) => s + t.alloc, 0);
   return (
     <Card>
-      <CardHeader eyebrow={`${window.ALIAS.tasks.length} contributors`} title="Team allocation"
+      <CardHeader eyebrow={`${ALIAS.tasks.length} contributors`} title="Team allocation"
         right={<span className="text-[11px] text-slate-500 tabular-nums">{Math.round(total * 100)}% total allocated</span>} />
       <div className="overflow-x-auto">
         <table className="w-full text-[12.5px]">
@@ -503,8 +519,8 @@ function TasksPanel() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800">
-            {window.ALIAS.tasks.map((t) => {
-              const p = window.TEAM_BY_ID[t.who];
+            {ALIAS.tasks.map((t) => {
+              const p = TEAM_BY_ID[t.who];
               const after = Math.min(1, t.current + t.alloc);
               return (
                 <tr key={t.who} className="hover:bg-slate-800/30">
@@ -553,7 +569,7 @@ function TasksPanel() {
 
 // Timeline / Gantt
 function TimelinePanel() {
-  const t = window.ALIAS.timeline;
+  const t = ALIAS.timeline;
   const lanes = [...new Set(t.bands.map((b) => b.lane))].sort();
   const W = 1.0; // fractional
   const colWeek = 100 / t.weeks;
@@ -652,7 +668,13 @@ function TimelinePanel() {
   );
 }
 
-window.WorkspaceParts = {
-  StepNav, IntakePanel, TriagePanel, ScopePanel, CollaboratorsPanel,
-  DraftPanel, TasksPanel, TimelinePanel,
+export const WorkspaceParts = {
+  StepNav,
+  IntakePanel,
+  TriagePanel,
+  ScopePanel,
+  CollaboratorsPanel,
+  DraftPanel,
+  TasksPanel,
+  TimelinePanel,
 };
