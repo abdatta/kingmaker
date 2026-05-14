@@ -2,7 +2,13 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// Base path is configurable so the same build works at the root (local dev,
+// custom-domain deploys) and under a sub-path (GitHub Pages project sites at
+// /<repo>/). CI sets VITE_BASE=/<repo>/; locally it defaults to '/'.
+const base = process.env.VITE_BASE || '/';
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     VitePWA({
@@ -17,8 +23,8 @@ export default defineConfig({
         background_color: '#020617',
         display: 'standalone',
         orientation: 'landscape',
-        start_url: '/',
-        scope: '/',
+        start_url: base,
+        scope: base,
         icons: [
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },

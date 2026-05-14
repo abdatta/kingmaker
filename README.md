@@ -75,6 +75,35 @@ To regenerate icons after changing the source SVG:
 npm run generate-pwa-assets
 ```
 
+## Deployment — GitHub Pages
+
+`.github/workflows/deploy.yml` builds on every push to `main` and publishes
+`dist/` via the official `actions/deploy-pages` action.
+
+One-time repo setup:
+
+1. Push the repo to GitHub.
+2. In **Settings → Pages**, set **Source** to **GitHub Actions**.
+3. Push to `main` (or run the workflow manually from the Actions tab).
+
+The site will be available at
+`https://<user>.github.io/<repo>/`. The workflow injects
+`VITE_BASE=/<repo>/` so all asset paths, the React Router basename, and the
+PWA manifest's `start_url`/`scope` line up under the sub-path.
+
+Other deploy targets:
+
+- **User/org root site** (`https://<user>.github.io/`) or **custom domain**:
+  override `VITE_BASE: /` in the workflow before the build step.
+- **Local preview of the production build**: `npm run preview` (serves
+  `dist/` at root — works because the default `VITE_BASE` is `/`).
+
+The build also writes `dist/404.html` (a copy of `index.html`) so deep
+links like `/opp/alias-tx/budget` resolve correctly on hard refresh — GitHub
+Pages serves `404.html` for unknown paths, and the SPA router takes over
+from there. `dist/.nojekyll` is also dropped so Pages skips Jekyll
+processing.
+
 ## Notes
 
 - The app is designed for ≥1440px desktop; narrower viewports compress
