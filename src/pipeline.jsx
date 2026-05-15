@@ -26,12 +26,30 @@ export function Pipeline({ onOpenOpp }) {
   const allProducts = ['All', ...new Set(OPPORTUNITIES.map((o) => o.productLine))];
   const allOwners = ['All', ...new Set(OPPORTUNITIES.map((o) => o.owner).filter(Boolean))];
 
+  // Sort priority: Pre-Solicitation cohort first (the Q&A window is the
+  // most time-sensitive phase — miss it and you lose the ability to shape
+  // the solicitation), then everything else by deadline-proximity ascending.
+  const STATUS_RANK = {
+    'Pre-Solicitation': 0,
+    'New': 1,
+    'In Triage': 2,
+    'Scoping': 3,
+    'Drafting': 4,
+    'In Review': 5,
+    'Selected': 6,
+    'Submitted': 7,
+    'Execution': 8,
+  };
   const filtered = OPPORTUNITIES.filter((o) =>
     (filters.status === 'All' || o.status === filters.status) &&
     (filters.agency === 'All' || o.agency === filters.agency) &&
     (filters.product === 'All' || o.productLine === filters.product) &&
     (filters.owner === 'All' || o.owner === filters.owner)
-  );
+  ).slice().sort((a, b) => {
+    const sr = (STATUS_RANK[a.status] ?? 99) - (STATUS_RANK[b.status] ?? 99);
+    if (sr !== 0) return sr;
+    return (a.deadlineDays ?? 9999) - (b.deadlineDays ?? 9999);
+  });
 
   const toggle = (id) => {
     setSelected((prev) => {

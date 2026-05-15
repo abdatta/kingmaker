@@ -136,7 +136,7 @@ forum.
 12 rows across 6 agencies, with **Pre-Solicitation** as a first-class
 status (between *New* and *In Triage*). Filter by status, agency,
 product line, owner. Multi-select for bulk pursue/reject. The right
-rail surfaces "DOE ARPA-E SCALEUP unassigned · ScanToBIM fit is high"
+rail surfaces "3 USDOT topics awaiting Q&A questions — window closes May 29"
 without you having to ask.
 
 ### Cross-cutting: the screen-aware AI rail

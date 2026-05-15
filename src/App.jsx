@@ -175,9 +175,9 @@ export default function App() {
         {
           id: 'p1',
           kind: 'decision',
-          title: 'DOE ARPA-E SCALEUP unassigned',
+          title: '3 USDOT topics awaiting Q&A questions',
           body:
-            'New from agent · 8h ago. ScanToBIM fit is high but ceiling is $5M (Phase III scale). Recommend triaging this week.',
+            'Q&A window closes May 29 (23 days). I can draft 2–3 clarifying questions per pursued topic and queue them for Atharv to review.',
         },
         {
           id: 'p2',

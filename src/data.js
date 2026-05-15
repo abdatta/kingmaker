@@ -113,12 +113,6 @@ const OPPORTUNITIES = [
     productLine: 'Astro Adjuster', addedAgo: '2d',
   },
   {
-    id: 'arpae-scaleup', title: 'DOE ARPA-E SCALEUP',
-    sol: 'DE-FOA-0003421', agency: 'DOE', ceiling: 5000000,
-    deadlineDays: 52, status: 'New', stage: 0, owner: null,
-    productLine: 'ScanToBIM', addedAgo: '8h',
-  },
-  {
     id: 'nsf-conv', title: 'NSF Convergence Accelerator',
     sol: '25-509', agency: 'NSF', ceiling: 750000,
     deadlineDays: 67, status: 'Saved', stage: 0, owner: 'alison',
