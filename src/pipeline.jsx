@@ -29,16 +29,20 @@ export function Pipeline({ onOpenOpp }) {
   // Sort priority: Pre-Solicitation cohort first (the Q&A window is the
   // most time-sensitive phase — miss it and you lose the ability to shape
   // the solicitation), then everything else by deadline-proximity ascending.
+  // Order matches the demo-script enumeration (Pre-Sol → Saved → In Triage
+  // → Scoping → Drafting → In Review → Selected → Submitted → Execution),
+  // so reading the script visually walks the eye down the Status column.
   const STATUS_RANK = {
     'Pre-Solicitation': 0,
-    'New': 1,
-    'In Triage': 2,
-    'Scoping': 3,
-    'Drafting': 4,
-    'In Review': 5,
-    'Selected': 6,
-    'Submitted': 7,
-    'Execution': 8,
+    'Saved': 1,
+    'New': 2,
+    'In Triage': 3,
+    'Scoping': 4,
+    'Drafting': 5,
+    'In Review': 6,
+    'Selected': 7,
+    'Submitted': 8,
+    'Execution': 9,
   };
   const filtered = OPPORTUNITIES.filter((o) =>
     (filters.status === 'All' || o.status === filters.status) &&

@@ -97,7 +97,7 @@ const OPPORTUNITIES = [
   {
     id: 'spwx', title: 'NASA SPWX.1.S26A',
     sol: 'NASA-2026-SPWX', agency: 'NASA', ceiling: 150000,
-    deadlineDays: 41, status: 'Scoping', stage: 2, owner: 'ryan',
+    deadlineDays: 41, status: 'In Review', stage: 7, owner: 'ryan',
     productLine: 'FireVision', addedAgo: '11d', inferred: 'Space-weather-adjacent sensing tasking',
   },
   {
