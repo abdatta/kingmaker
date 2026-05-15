@@ -24,6 +24,7 @@ import {
   KB,
   NEEDS,
   OPPS_BY_ID,
+  ALIAS,
 } from './data.js';
 
 function BudgetPanel({ lines, indirect, total, onTrim, trimmed, ceiling }) {
@@ -456,9 +457,22 @@ function CompliancePanel({ opp }) {
 
 // ─── Team & Capabilities ─────────────────────────────────────────────────────
 
-function TeamScreen({ onBack }) {
+function TeamScreen({ onOpenOpp }) {
   const [active, setActive] = React.useState(null);
-  if (active) return <PersonDetail person={active} onBack={() => setActive(null)} />;
+  if (active) return <PersonDetail person={active} onBack={() => setActive(null)} onOpenOpp={onOpenOpp} />;
+
+  // Most-relevant destination for a person card:
+  //  1. If they're allocated to the ALIAS team, jump straight to its Tasks
+  //     step (the demo's "team allocation" view).
+  //  2. Else if they own a proposal, jump to that proposal's Tasks step.
+  //  3. Else fall back to the bio/profile view.
+  const onPersonClick = (p) => {
+    const inAlias = ALIAS.tasks.find((t) => t.who === p.id);
+    if (inAlias) return onOpenOpp?.('alias-tx', 'tasks');
+    const owned = OPPORTUNITIES.find((o) => o.owner === p.id);
+    if (owned) return onOpenOpp?.(owned.id, 'tasks');
+    setActive(p);
+  };
   return (
     <div className="px-6 py-5 max-w-[1180px]">
       <div className="flex items-end justify-between mb-4">
@@ -472,7 +486,7 @@ function TeamScreen({ onBack }) {
 
       <div className="grid grid-cols-3 gap-3">
         {TEAM.map((p) => (
-          <Card key={p.id} className="p-4 hover:ring-1 hover:ring-slate-700 cursor-pointer transition" as="button" onClick={() => setActive(p)}>
+          <Card key={p.id} className="p-4 hover:ring-1 hover:ring-cyan-500/40 cursor-pointer transition" as="button" onClick={() => onPersonClick(p)}>
             <div className="flex items-start gap-3 text-left w-full">
               <Avatar id={p.id} size={40} />
               <div className="min-w-0 flex-1">
@@ -498,7 +512,26 @@ function TeamScreen({ onBack }) {
   );
 }
 
-function PersonDetail({ person, onBack }) {
+function PersonDetail({ person, onBack, onOpenOpp }) {
+  // Combine ownership (one proposal where this person is the lead) with
+  // task allocation (proposals where they're pulled in via the Tasks step
+  // — currently only ALIAS-Texas has a detailed allocation fixture).
+  const ownedOpps = OPPORTUNITIES.filter((o) => o.owner === person.id);
+  const aliasTask = ALIAS.tasks.find((t) => t.who === person.id);
+  const seen = new Set(ownedOpps.map((o) => o.id));
+  const assignments = ownedOpps.map((o) => ({
+    opp: o,
+    role: 'Owner / lead',
+    alloc: null,
+  }));
+  if (aliasTask && !seen.has('alias-tx')) {
+    assignments.push({
+      opp: OPPS_BY_ID['alias-tx'],
+      role: aliasTask.stream,
+      alloc: aliasTask.alloc,
+    });
+  }
+
   return (
     <div className="px-6 py-5 max-w-[1180px]">
       <button onClick={onBack} className="text-[12px] text-slate-400 hover:text-slate-200 inline-flex items-center gap-1 mb-3"><Icon.ArrowLeft size={12} />Back to team</button>
@@ -515,7 +548,8 @@ function PersonDetail({ person, onBack }) {
           </div>
         </Card>
         <Card className="col-span-2">
-          <CardHeader eyebrow="Right now" title="Current load & assignments" />
+          <CardHeader eyebrow="Right now" title="Current load & assignments"
+            right={<span className="text-[10.5px] text-slate-500">click a proposal to jump to its team allocation →</span>} />
           <div className="px-4 py-3 space-y-3 text-[12.5px]">
             <div>
               <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
@@ -524,16 +558,22 @@ function PersonDetail({ person, onBack }) {
               <ProgressBar value={(1 - person.availability) * 100} tone={person.availability > 0.5 ? 'emerald' : person.availability > 0.3 ? 'amber' : 'rose'} height={6} />
             </div>
             <div className="space-y-2 pt-2">
-              {OPPORTUNITIES.filter((o) => o.owner === person.id).map((o) => (
-                <div key={o.id} className="flex items-center gap-2 rounded border border-slate-800 bg-slate-950/40 px-3 py-2">
-                  <ProductPill name={o.productLine} />
-                  <div className="flex-1 text-slate-200">{o.title}</div>
-                  <Mono className="text-[11px] text-slate-500">{o.sol}</Mono>
-                  <StatusPill status={o.status} />
-                </div>
+              {assignments.map(({ opp, role, alloc }) => (
+                <button key={opp.id}
+                  onClick={() => onOpenOpp?.(opp.id, 'tasks')}
+                  className="w-full flex items-center gap-2 rounded border border-slate-800 bg-slate-950/40 px-3 py-2 hover:border-cyan-500/40 hover:bg-slate-900/60 transition text-left">
+                  <ProductPill name={opp.productLine} />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-slate-200 truncate">{opp.title}</div>
+                    <div className="text-[10.5px] text-slate-500 mt-0.5">{role}{alloc != null ? ` · ${Math.round(alloc * 100)}% allocated` : ''}</div>
+                  </div>
+                  <Mono className="text-[11px] text-slate-500">{opp.sol}</Mono>
+                  <StatusPill status={opp.status} />
+                  <Icon.Chevron size={13} className="text-slate-600" />
+                </button>
               ))}
-              {OPPORTUNITIES.filter((o) => o.owner === person.id).length === 0 && (
-                <div className="text-[11.5px] text-slate-500 italic">Not currently leading an active proposal.</div>
+              {assignments.length === 0 && (
+                <div className="text-[11.5px] text-slate-500 italic">Not currently on an active proposal.</div>
               )}
             </div>
           </div>

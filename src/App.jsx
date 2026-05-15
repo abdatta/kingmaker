@@ -468,7 +468,7 @@ export default function App() {
               <Route path="/" element={<Dashboard onOpenOpp={openOpp} onNavigate={goNavigate} />} />
               <Route path="/pipeline" element={<Pipeline onOpenOpp={openOpp} />} />
               <Route path="/reviews" element={<ReviewsScreen onOpenOpp={openOpp} />} />
-              <Route path="/team" element={<TeamScreen />} />
+              <Route path="/team" element={<TeamScreen onOpenOpp={openOpp} />} />
               <Route path="/kb" element={<KBScreen />} />
               <Route path="/settings" element={<SettingsScreen />} />
               <Route path="/opp/:oppId" element={<Navigate to="budget" replace />} />

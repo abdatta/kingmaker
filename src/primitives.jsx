@@ -79,10 +79,19 @@ function AvatarStack({ ids, size = 22, max = 4 }) {
   );
 }
 
-function Card({ className = '', children, as = 'div' }) {
+function Card({ className = '', children, as = 'div', onClick, ...rest }) {
   const Tag = as;
+  // Forward onClick + extra props so callers can use Card as a clickable
+  // surface (e.g. `<Card as="button" onClick={…}>` on the Team grid).
   return (
-    <Tag className={`bg-slate-900 border border-slate-800 rounded-md ${className}`}>{children}</Tag>
+    <Tag
+      className={`bg-slate-900 border border-slate-800 rounded-md ${className}`}
+      onClick={onClick}
+      {...(Tag === 'button' ? { type: 'button' } : null)}
+      {...rest}
+    >
+      {children}
+    </Tag>
   );
 }
 
