@@ -45,6 +45,18 @@ right-rail that is *screen-aware*, not a generic chat box.
 
 The product is designed to be walked through in roughly five minutes.
 
+> 🎥 **14-second walkthrough of the dashboard + discovery-agent filter log:**
+
+<video src="https://github.com/abdatta/kingmaker/raw/main/media/01-dashboard-discovery-agent.mp4" controls width="100%" muted playsinline>
+  Your browser doesn't support inline video.
+  Watch <a href="media/01-dashboard-discovery-agent.mp4">the MP4</a>
+  or the <a href="media/01-dashboard-discovery-agent.webm">WebM</a> directly.
+</video>
+
+<sup>(If the player doesn't render inline, open
+[`media/01-dashboard-discovery-agent.mp4`](media/01-dashboard-discovery-agent.mp4)
+or the [`.webm`](media/01-dashboard-discovery-agent.webm) directly.)</sup>
+
 ### 1. Dashboard — what needs your attention right now
 
 ![Dashboard](screenshots/01-dashboard.png)
@@ -166,6 +178,7 @@ npm run build                # production build → dist/
 npm run preview              # serve dist/ on :4173
 npm run generate-pwa-assets  # regenerate PWA icons from public/favicon.svg
 node scripts/screenshots.mjs # regenerate README screenshots (dev server must be running)
+node scripts/record-demo.mjs # regenerate the dashboard walkthrough video (needs ffmpeg for .mp4)
 ```
 
 ---
