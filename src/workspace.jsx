@@ -13,6 +13,8 @@ import {
   MoneyMono,
   ProgressBar,
   SectionHeading,
+  TONE_TEXT,
+  TONE_DOT,
 } from './primitives.jsx';
 import { ALIAS, TEAM_BY_ID } from './data.js';
 

@@ -123,8 +123,11 @@ function Breadcrumbs({ route, onNavigate }) {
   );
 }
 
-function TopBar({ route, onNavigate, syncedAgo }) {
-  const opp = route.screen === 'opportunity' ? OPPS_BY_ID[route.oppId] : null;
+function TopBar({ route, onNavigate, syncedAgo, opp: oppProp }) {
+  // Prefer the live opp passed from App (carries derived status like
+  // "In Review" after budget trim). Fall back to fixture lookup.
+  const opp =
+    oppProp ?? (route.screen === 'opportunity' ? OPPS_BY_ID[route.oppId] : null);
 
   return (
     <header className="h-14 border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-20 flex items-center px-5 gap-4">
