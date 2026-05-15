@@ -13,6 +13,7 @@ import {
 } from 'react-router-dom';
 import { Sidebar, TopBar, AIRail } from './shell.jsx';
 import { RouteErrorBoundary } from './error-boundary.jsx';
+import Welcome from './welcome.jsx';
 import { Dashboard } from './dashboard.jsx';
 import { Pipeline } from './pipeline.jsx';
 import { WorkspaceParts } from './workspace.jsx';
@@ -77,6 +78,7 @@ export default function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const navigate = useNavigate();
   const route = useDerivedRoute();
+  const location = useLocation();
 
   const [collapsedSidebar, setCollapsedSidebar] = React.useState(false);
   const [collapsedRail, setCollapsedRail] = React.useState(!t.showAIRail);
@@ -451,6 +453,12 @@ export default function App() {
   // sidebar/topbar/airail expect a {screen, oppId} shape — keep parity.
   const routeShape = { screen: route.screen, oppId: route.oppId };
 
+  // /welcome is a chrome-less brand splash — render outside the app shell.
+  // Hooks are all declared above so this early return is hooks-rule safe.
+  if (location.pathname === '/welcome') {
+    return <Welcome />;
+  }
+
   return (
     <div className="h-screen flex bg-slate-950 text-slate-100 overflow-hidden">
       <Sidebar
@@ -459,6 +467,7 @@ export default function App() {
         collapsed={collapsedSidebar}
         onToggleCollapse={() => setCollapsedSidebar((c) => !c)}
         reviewBadge={reviewBadge}
+        onOpenWelcome={() => navigate('/welcome')}
       />
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <TopBar route={routeShape} onNavigate={goNavigate} syncedAgo="8 min ago" opp={opp} />

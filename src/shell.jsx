@@ -14,7 +14,7 @@ import {
 } from './primitives.jsx';
 import { OPPS_BY_ID, AI_FEED } from './data.js';
 
-function Sidebar({ route, onNavigate, collapsed, onToggleCollapse, reviewBadge }) {
+function Sidebar({ route, onNavigate, collapsed, onToggleCollapse, reviewBadge, onOpenWelcome }) {
   const items = [
     { id: 'dashboard', label: 'Dashboard',          icon: <Icon.Home size={15} /> },
     { id: 'pipeline',  label: 'Pipeline',           icon: <Icon.Pipeline size={15} /> },
@@ -26,9 +26,10 @@ function Sidebar({ route, onNavigate, collapsed, onToggleCollapse, reviewBadge }
 
   return (
     <aside className={`shrink-0 flex flex-col border-r border-slate-800 bg-slate-950 transition-[width] duration-200 ${collapsed ? 'w-[64px]' : 'w-[240px]'}`}>
-      {/* Logo */}
-      <div className={`flex items-center ${collapsed ? 'justify-center px-2' : 'px-4'} h-14 border-b border-slate-800`}>
-        <button onClick={onToggleCollapse} className="flex items-center gap-2.5 group" title={collapsed ? 'Expand' : 'Collapse'}>
+      {/* Logo + collapse toggle. Logo click → welcome splash; the small
+          chevron handles collapse/expand. */}
+      <div className={`flex items-center ${collapsed ? 'justify-center px-2' : 'px-4'} h-14 border-b border-slate-800 gap-2`}>
+        <button onClick={onOpenWelcome} className="flex items-center gap-2.5 group" title="Open welcome screen">
           <span className="relative inline-flex h-6 w-6 items-center justify-center">
             {/* OpalAI mark — abstract gemstone */}
             <svg viewBox="0 0 24 24" className="h-6 w-6">
@@ -47,7 +48,27 @@ function Sidebar({ route, onNavigate, collapsed, onToggleCollapse, reviewBadge }
             <span className="text-[13px] font-bold tracking-[0.18em] text-slate-100">KINGMAKER</span>
           )}
         </button>
+        {!collapsed && (
+          <button
+            onClick={onToggleCollapse}
+            className="ml-auto h-7 w-7 inline-flex items-center justify-center rounded text-slate-500 hover:text-slate-200 hover:bg-slate-900"
+            title="Collapse sidebar"
+            aria-label="Collapse sidebar"
+          >
+            <Icon.ChevronLeft size={14} />
+          </button>
+        )}
       </div>
+      {collapsed && (
+        <button
+          onClick={onToggleCollapse}
+          className="mx-auto mt-1 h-7 w-7 inline-flex items-center justify-center rounded text-slate-500 hover:text-slate-200 hover:bg-slate-900"
+          title="Expand sidebar"
+          aria-label="Expand sidebar"
+        >
+          <Icon.Chevron size={14} />
+        </button>
+      )}
 
       {/* Nav */}
       <nav className="flex-1 px-2 py-3 space-y-0.5">
